@@ -4,6 +4,13 @@
 
 <button onclick="testFunction()" type="button">Click me!</button>
 
+
+<div class="form">
+  Enter name of city:<input type="text" name="city" value="">
+  <input type="submit" name="" value="submit">
+
+</div>
+
 <div id="test">
 
 </div>
@@ -11,6 +18,7 @@
 
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script type="text/javascript">
+  const appId = '0ab8b495935072ea06a9032030b224f9'
   function testFunction() {
     document.getElementById('test').innerHTML = 'The weather in (city name) is 85 degrees. Below is the 5 day forecast'
   }

@@ -2,13 +2,23 @@
 
 <h2>This is my weather page app</h2>
 
-  <form class="form" action="index.html" method="post">
+  <form class="currentForm" action="index.html" method="post">
     Enter name of city:<input id="cityName" type="text" name="city" value=""><br>
     Enter country:<input id="countryName" type="text" name="country" value=""><br>
-    <input type="submit" name="" value="Get Weather">
+    <input type="submit" name="" value="Get Current Weather">
   </form>
 
-<div id="test">
+<div id="currentWeather">
+
+</div>
+
+<form class="fiveDayForm" action="index.html" method="post">
+  Enter name of city:<input id="cityNameForecast" type="text" name="city" value=""><br>
+  Enter country:<input id="countryNameForecast" type="text" name="country" value=""><br>
+  <input type="submit" name="" value="Get 5 day Forecast">
+</form>
+
+<div id="forecastWeather">
 
 </div>
 
@@ -24,17 +34,31 @@
   })
 
     $(function () {
-    $('.form').on('submit', function(event) {
+    $('.currentForm').on('submit', function(event) {
       event.preventDefault();
       const city = document.getElementById("cityName").value
       const country = document.getElementById("countryName").value
        $.get(`http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&APPID=${appId}`, function(data) {
          const template = Handlebars.compile(document.getElementById("weather-template").innerHTML)
          const result = template(data)
-         document.getElementById("test").innerHTML = result
+         document.getElementById("currentWeather").innerHTML = result
        })
      })
    })
+
+   $(function () {
+   $('.fiveDayForm').on('submit', function(event) {
+     event.preventDefault();
+     const city = document.getElementById("cityNameForecast").value
+     const country = document.getElementById("countryNameForecast").value
+      $.get(`http://api.openweathermap.org/data/2.5/forecast?q=${city},${country}&APPID=${appId}`, function(data) {
+
+        const template = Handlebars.compile(document.getElementById("forecast-template").innerHTML)
+        const result = template(data)
+        document.getElementById("forecastWeather").innerHTML = result
+      })
+    })
+  })
 
 
 </script>
@@ -48,10 +72,30 @@
   <section>
     <h1>{{this.name}}</h1>
     <h3>{{convertTemperature this.main.temp}} degrees</h3>
-    {{#each this.weather}}
+    {{#each this.weather}
+    <div>
     <h3>{{description}}</h3>
-    <img src="http://openweathermap.org/img/w/{{icon}}.png"></img> 
+    <img src="http://openweathermap.org/img/w/{{icon}}.png"></img>
+  </div>
 
   </section>
+  {{/each}}
+</script>
+
+<script id="forecast-template" type="text/x-handlebars-template">
+
+
+
+  <section>
+
+    <h1>{{this.city.name}}</h1>
+    {{#each this.list}}
+    <h3>{{convertTemperature main.temp}} degrees</h3>
+      {{#each weather}}
+    <h3>{{description}}</h3>
+    <img src="http://openweathermap.org/img/w/{{icon}}.png"></img>
+
+  </section>
+    {{/each}}
   {{/each}}
 </script>

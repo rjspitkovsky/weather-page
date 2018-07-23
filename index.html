@@ -2,9 +2,6 @@
 
 <h2>This is my weather page app</h2>
 
-<button onclick="testFunction()" type="button">Click me!</button>
-
-
   <form class="form" action="index.html" method="post">
     Enter name of city:<input id="cityName" type="text" name="city" value=""><br>
     Enter country code:<input id="countryName" type="text" name="country" value=""><br>
@@ -19,24 +16,30 @@
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script type="text/javascript">
   const appId = '0ab8b495935072ea06a9032030b224f9'
-  // function testFunction() {
-  //   document.getElementById('test').innerHTML = 'The weather in (city name) is 85 degrees. Below is the 5 day forecast'
-  // }
 
     $(function () {
     $('.form').on('submit', function(event) {
       event.preventDefault();
       const city = document.getElementById("cityName").value
       const country = document.getElementById("countryName").value
-      // debugger
-      // const getCityWeather =
        $.get(`http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&APPID=${appId}`, function(data) {
+         // debugger
+         const template = Handlebars.compile(document.getElementById("weather-template").innerHTML)
+         const result = template(data)
          debugger
-         // const weather = data.json
-         document.getElementById("test").innerHTML = data.weather[0].description
+         document.getElementById("test").innerHTML = result
        })
-})
-})
+     })
+   })
 
 
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js"></script>
+<script id="weather-template" type="text/x-handlebars-template">
+  <section>
+    <h1>{this.name}</h1>
+    <h3>{this.main.temp}</h3>
+    <h3>{this.weather[0].description}</h3>
+  </section>
 </script>

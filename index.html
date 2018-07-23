@@ -5,9 +5,9 @@
 <button onclick="testFunction()" type="button">Click me!</button>
 
 
-  <form class="cityName" action="index.html" method="post">
-    Enter name of city:<input type="text" name="city" value=""><br>
-    Enter country code:<input type="text" name="country" value=""><br>
+  <form class="form" action="index.html" method="post">
+    Enter name of city:<input id="cityName" type="text" name="city" value=""><br>
+    Enter country code:<input id="countryName" type="text" name="country" value=""><br>
     <input type="submit" name="" value="submit">
   </form>
 
@@ -19,17 +19,24 @@
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script type="text/javascript">
   const appId = '0ab8b495935072ea06a9032030b224f9'
-  function testFunction() {
-    document.getElementById('test').innerHTML = 'The weather in (city name) is 85 degrees. Below is the 5 day forecast'
-  }
+  // function testFunction() {
+  //   document.getElementById('test').innerHTML = 'The weather in (city name) is 85 degrees. Below is the 5 day forecast'
+  // }
 
-  function getWeather() {
-    ('form').submit(function(event) {
-      event.preventDefault()
-      const city = $(this).serialize();
-      const getCityWeather = $.get()
-    })
-  }
+    $(function () {
+    $('.form').on('submit', function(event) {
+      event.preventDefault();
+      const city = document.getElementById("cityName").value
+      const country = document.getElementById("countryName").value
+      // debugger
+      // const getCityWeather =
+       $.get(`http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&APPID=${appId}`, function(data) {
+         debugger
+         // const weather = data.json
+         document.getElementById("test").innerHTML = data.weather[0].description
+       })
+})
+})
 
 
 </script>

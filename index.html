@@ -12,6 +12,8 @@
 
 </div>
 
+
+
 <form class="fiveDayForm" action="index.html" method="post">
   Enter name of city:<input id="cityNameForecast" type="text" name="city" value=""><br>
   Enter country:<input id="countryNameForecast" type="text" name="country" value=""><br>
@@ -33,6 +35,19 @@
     return temp
   })
 
+  Handlebars.registerHelper('convertDateTime', function(date) {
+    const dateTime = new Date(date)
+
+    const formattedDateTime = dateTime.toLocaleString(undefined, {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    })
+    return formattedDateTime
+  })
+
     $(function () {
     $('.currentForm').on('submit', function(event) {
       event.preventDefault();
@@ -52,7 +67,7 @@
      const city = document.getElementById("cityNameForecast").value
      const country = document.getElementById("countryNameForecast").value
       $.get(`http://api.openweathermap.org/data/2.5/forecast?q=${city},${country}&APPID=${appId}`, function(data) {
-
+    
         const template = Handlebars.compile(document.getElementById("forecast-template").innerHTML)
         const result = template(data)
         document.getElementById("forecastWeather").innerHTML = result
@@ -84,17 +99,20 @@
 
 <script id="forecast-template" type="text/x-handlebars-template">
 
-
+<!-- Obviously this should be turned into a table -->
 
   <section>
 
+    <h2> Forecast for the next 5 days in 3 hour increments: </h2>
+
     <h1>{{this.city.name}}</h1>
     {{#each this.list}}
+    <h2>{{convertDateTime dt_txt}}</h2>
     <h3>{{convertTemperature main.temp}} degrees</h3>
       {{#each weather}}
     <h3>{{description}}</h3>
     <img src="http://openweathermap.org/img/w/{{icon}}.png"></img>
-
+  </table>
   </section>
     {{/each}}
   {{/each}}
